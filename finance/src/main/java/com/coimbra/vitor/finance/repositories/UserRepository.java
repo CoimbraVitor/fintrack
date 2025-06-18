@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 import com.coimbra.vitor.finance.entities.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>{
-	Optional<User> findByLogin(String login);
+	Optional<User> findByEmail(String email);
 }

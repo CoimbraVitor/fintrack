@@ -25,7 +25,7 @@ public class DespesaService {
     private UserRepository userRepository;
 
     public List<DespesaDTO> findAll(String login) {
-        return repository.findByUserLogin(login)
+        return repository.findByUserEmail(login)
                 .stream()
                 .map(this::toDTO)
                 .toList();
@@ -39,7 +39,7 @@ public class DespesaService {
 
 
     public Despesa create(DespesaRequestDTO dto, String login) {
-        User user = userRepository.findByLogin(login)
+        User user = userRepository.findByEmail(login)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
         Despesa despesa = new Despesa(
@@ -54,14 +54,14 @@ public class DespesaService {
     }
 
     public DespesaDTO findByIdAndUserLogin(Integer id, String login) {
-        Despesa despesa = repository.findByIdAndUserLogin(id, login)
+        Despesa despesa = repository.findByIdAndUserEmail(id, login)
                 .orElseThrow(() -> new EntityNotFoundException("Despesa com ID " + id + " não encontrada"));
 
         return toDTO(despesa);
     }
 
     public DespesaDTO update(Integer id, DespesaRequestDTO dto, String login) {
-        Despesa despesa = repository.findByIdAndUserLogin(id, login)
+        Despesa despesa = repository.findByIdAndUserEmail(id, login)
                 .orElseThrow(() -> new EntityNotFoundException("Despesa com ID " + id + " não encontrada"));
 
         despesa.setNome(dto.nome());
@@ -73,7 +73,7 @@ public class DespesaService {
     }
 
     public void delete(Integer id, String login) {
-        Despesa despesa = repository.findByIdAndUserLogin(id, login)
+        Despesa despesa = repository.findByIdAndUserEmail(id, login)
                 .orElseThrow(() -> new EntityNotFoundException("Despesa com ID " + id + " não encontrada"));
 
         repository.delete(despesa);

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.coimbra.vitor.finance.config.security.TokenService;
 import com.coimbra.vitor.finance.dto.AuthenticationDTO;
@@ -21,6 +22,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("auth")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -31,7 +33,8 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+        
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
 		var auth = this.authenticationManager.authenticate(usernamePassword);
 
 		var token = tokenService.generateToken((User) auth.getPrincipal());
@@ -42,12 +45,19 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO data){
-        if (this.repository.findByLogin(data.login()).isPresent()) {
-            return ResponseEntity.badRequest().body("Login já existe.");
+        if (this.repository.findByEmail(data.email()).isPresent()) {
+            return ResponseEntity.badRequest().body("Email já existe.");
         }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.login(), encryptedPassword, data.role());
+        User newUser = new User(
+            data.email(),
+            encryptedPassword,
+            data.firstName(),
+            data.lastName(),
+            data.country(),
+            data.userName()
+        );
 
         this.repository.save(newUser);
 

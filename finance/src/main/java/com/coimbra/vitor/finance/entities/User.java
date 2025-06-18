@@ -8,8 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,83 +22,93 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@Email
-	private String login;
+	private String email;
 	private String password;
-	@Enumerated(EnumType.STRING)
-	private UserRole role;
+    private String firstName;
+    private String lastName;
+    private String country;
+    private String userName;
 
-
-	public User(String login, String password, UserRole role) {
-		this.login = login;
+	public User(String email, String password, String firstName, String lastName, String country, String userName) {
+		this.email = email;
 		this.password = password;
-		this.role = role;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.country = country;
+		this.userName = userName;
 	}
 	
 	public User() {
 	}
 
-	
-	
-
 	public Integer getId() {
 		return id;
 	}
-
-
 
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-
-
-	public String getLogin() {
-		return login;
+	public String getEmail() {
+		return email;
 	}
 
-
-
-	public void setLogin(String login) {
-		this.login = login;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-
-
-	public UserRole getRole() {
-		return role;
+	public String getPassword() {
+		return password;
 	}
-
-
-
-	public void setRole(UserRole role) {
-		this.role = role;
-	}
-
-
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	public String getFirstName() {
+		return firstName;
+	}
 
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		if (this.role == UserRole.ADMIN)
-			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-		else
-			return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
 	}
 
 	@Override
 	public String getUsername() {
-		return login;
+		return email;
 	}
 
 	@Override
@@ -135,10 +143,5 @@ public class User implements UserDetails {
 		public String getRole() {
 			return role;
 		}
-	}
-
-	@Override
-	public String getPassword() {
-		return password;
 	}
 }
