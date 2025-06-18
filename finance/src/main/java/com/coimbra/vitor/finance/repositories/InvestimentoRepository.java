@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.coimbra.vitor.finance.entities.Investimento;
 
 public interface InvestimentoRepository extends JpaRepository<Investimento, Integer> {
-    List<Investimento> findByUserLogin(String login);
-    Optional<Investimento> findByIdAndUserLogin(Integer id, String login);
+    List<Investimento> findByUserEmail(String email);
+    Optional<Investimento> findByIdAndUserEmail(Integer id, String email);
 }

@@ -17,7 +17,7 @@ public class UserService implements UserServiceImpl {
 
 	public List<UserResponseDTO> findAll() {
 		List<UserResponseDTO> users = repository.findAll().stream()
-				.map(user -> new UserResponseDTO(user.getId(), user.getLogin(), user.getRole().name())).toList();
+				.map(user -> new UserResponseDTO(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getCountry(), user.getUserName())).toList();
 		return users;
 	}
 }

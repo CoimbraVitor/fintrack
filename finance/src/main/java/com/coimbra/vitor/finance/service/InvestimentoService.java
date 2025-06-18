@@ -24,7 +24,7 @@ public class InvestimentoService {
     private UserRepository userRepository;
 
     public List<InvestimentoDTO> findAll(String login) {
-        return repository.findByUserLogin(login)
+        return repository.findByUserEmail(login)
                 .stream()
                 .map(this::toDTO)
                 .toList();
@@ -38,7 +38,7 @@ public class InvestimentoService {
 
 
     public Investimento create(InvestimentoRequestDTO dto, String login) {
-        User user = userRepository.findByLogin(login)
+        User user = userRepository.findByEmail(login)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
         Investimento investimento = new Investimento(
@@ -55,14 +55,14 @@ public class InvestimentoService {
     }
 
     public InvestimentoDTO findByIdAndUserLogin(Integer id, String login) {
-        Investimento investimento = repository.findByIdAndUserLogin(id, login)
+        Investimento investimento = repository.findByIdAndUserEmail(id, login)
                 .orElseThrow(() -> new EntityNotFoundException("Investimento com ID " + id + " não encontrado"));
 
         return toDTO(investimento);
     }
 
     public InvestimentoDTO update(Integer id, InvestimentoRequestDTO dto, String login) {
-        Investimento investimento = repository.findByIdAndUserLogin(id, login)
+        Investimento investimento = repository.findByIdAndUserEmail(id, login)
                 .orElseThrow(() -> new EntityNotFoundException("Investimento com ID " + id + " não encontrado"));
 
         investimento.setNome(dto.nome());
@@ -76,7 +76,7 @@ public class InvestimentoService {
     }
 
     public void delete(Integer id, String login) {
-        Investimento investimento = repository.findByIdAndUserLogin(id, login)
+        Investimento investimento = repository.findByIdAndUserEmail(id, login)
                 .orElseThrow(() -> new EntityNotFoundException("Investimento com ID " + id + " não encontrado"));
 
         repository.delete(investimento);

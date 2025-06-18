@@ -24,20 +24,20 @@ public class DashboardService {
 	@Autowired
 	private InvestimentoRepository investimentoRepository;
 
-	public Integer calcularSaldo(String login) {
-		int totalReceitas = receitaRepository.findByUserLogin(login).stream().mapToInt(Receita::getValorEmCents).sum();
+	public Integer calcularSaldo(String email) {
+		int totalReceitas = receitaRepository.findByUserEmail(email).stream().mapToInt(Receita::getValorEmCents).sum();
 
-		int totalDespesas = despesaRepository.findByUserLogin(login).stream().mapToInt(Despesa::getValorEmCents).sum();
+		int totalDespesas = despesaRepository.findByUserEmail(email).stream().mapToInt(Despesa::getValorEmCents).sum();
 
 		return totalReceitas - totalDespesas;
 	}
 
-	public Map<String, Integer> obterResumo(String login) {
-		int totalReceitas = receitaRepository.findByUserLogin(login).stream().mapToInt(Receita::getValorEmCents).sum();
+	public Map<String, Integer> obterResumo(String email) {
+		int totalReceitas = receitaRepository.findByUserEmail(email).stream().mapToInt(Receita::getValorEmCents).sum();
 
-		int totalDespesas = despesaRepository.findByUserLogin(login).stream().mapToInt(Despesa::getValorEmCents).sum();
+		int totalDespesas = despesaRepository.findByUserEmail(email).stream().mapToInt(Despesa::getValorEmCents).sum();
 
-		int totalInvestimentos = investimentoRepository.findByUserLogin(login).stream()
+		int totalInvestimentos = investimentoRepository.findByUserEmail(email).stream()
 				.mapToInt(Investimento::getValorAplicadoEmCents).sum();
 
 		return Map.of("receitas", totalReceitas, "despesas", totalDespesas, "investimentos", totalInvestimentos);

@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.coimbra.vitor.finance.entities.Receita;
 
 public interface ReceitaRepository extends JpaRepository<Receita, Integer> {
-	List<Receita> findByUserLogin(String login);
+	List<Receita> findByUserEmail(String email);
 
-	Optional<Receita> findByIdAndUserLogin(Integer id, String login);
+	Optional<Receita> findByIdAndUserEmail(Integer id, String email);
 
 }

@@ -26,7 +26,7 @@ public class ReceitaService {
 	private UserRepository userRepository;
 
 	public List<ReceitaResponseDTO> findAll(String login) {
-		List<Receita> receitas = repository.findByUserLogin(login);
+		List<Receita> receitas = repository.findByUserEmail(login);
 		return receitas.stream().map(r -> new ReceitaResponseDTO(r.getValor(), r.getNome())).toList();
 	}
 	
@@ -39,7 +39,7 @@ public class ReceitaService {
 
 
 	public Receita create(ReceitaRequestDTO dto, String login) {
-		User user = userRepository.findByLogin(login)
+		User user = userRepository.findByEmail(login)
 				.orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
 		Receita receita = new Receita();
@@ -53,7 +53,7 @@ public class ReceitaService {
 	}
 
 	public ReceitaDTO findByIdAndUserLogin(Integer id, String email) {
-		Receita receita = repository.findByIdAndUserLogin(id, email)
+		Receita receita = repository.findByIdAndUserEmail(id, email)
 				.orElseThrow(() -> new EntityNotFoundException("Receita com ID " + id + " não encontrada"));
 
 		return new ReceitaDTO(receita);
@@ -62,7 +62,7 @@ public class ReceitaService {
 
 	@Transactional
 	public ReceitaDTO update(Integer id, ReceitaRequestDTO dto, String login) {
-		Receita receita = repository.findByIdAndUserLogin(id, login)
+		Receita receita = repository.findByIdAndUserEmail(id, login)
 				.orElseThrow(() -> new EntityNotFoundException("Receita com ID " + id + " não encontrada"));
 
 		receita.setNome(dto.nome());
@@ -74,7 +74,7 @@ public class ReceitaService {
 
 	@Transactional
 	public void delete(Integer id, String login) {
-		Receita receita = repository.findByIdAndUserLogin(id, login)
+		Receita receita = repository.findByIdAndUserEmail(id, login)
 				.orElseThrow(() -> new EntityNotFoundException("Receita com ID " + id + " não encontrada"));
 
 		repository.delete(receita);
